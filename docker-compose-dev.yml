@@ -1,0 +1,21 @@
+version: "3"
+services:
+
+  db:
+    image: postgres:13
+    restart: always
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_PASSWORD: dbpass
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .:/code
+    command: ["run_bot"]
