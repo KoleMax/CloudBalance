@@ -1,0 +1,50 @@
+default_language_version:
+  python: python3.7.6
+exclude: '^(migrations|api/proto).*'
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: check-byte-order-marker
+      - id: check-json
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: pretty-format-json
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      - id: no-commit-to-branch
+        args: ['--branch', 'master', '--pattern', 'release/.*']
+  - repo: https://github.com/pycqa/isort
+    rev: 5.6.4
+    hooks:
+      - id: isort
+        files: '\.py'
+      - id: isort
+        files: 'app/.*'
+      - id: isort
+        files: 'tests/.*'
+  - repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        language_version: python3.7
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.8.4
+    hooks:
+      - id: flake8
+        additional_dependencies: [flake8-typing-imports==1.10.0]
+  - repo: https://github.com/pycqa/pylint
+    rev: pylint-2.6.0
+    hooks:
+    - id: pylint
+      exclude: ^migrations/
+      args:
+        - --errors-only
+        - --rcfile=.pylintrc
+      additional_dependencies: [pylint-venv]
