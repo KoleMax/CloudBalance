@@ -5,6 +5,6 @@ case "$1" in
     alembic upgrade head
   ;;
   run_bot)
-    exec python3 ./application/app.py
+    python main.py
   ;;
 esac

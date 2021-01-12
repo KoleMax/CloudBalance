@@ -1,18 +1,23 @@
 import pydantic
 
+from typing import Optional
+
 
 class Settings(pydantic.BaseSettings):
+    # App config
     SERVICE_NAME: str = "Cloud-Balance"
-    TELEGRAM_TOKEN: str
+    TELEGRAM_TOKEN: Optional[str]
 
+    # Logging config
     # Debug mod + log level 'debug'
     DEBUG: bool = False
     LOG_LEVEL: str = "INFO"
 
-    # API_HOST: str = "127.0.0.1"
-    # API_PORT: int = 8000
+    SYSLOG_HOST: str = "127.0.0.1"
+    SYSLOG_PORT: int = 514
 
-    DB_URL: pydantic.PostgresDsn = "postgres://postgres:dbpass@localhost:5432/db"  # pylint: disable=no-member
+    # Database config
+    DB_URL: pydantic.PostgresDsn = "postgres://postgres:cloudbalance@db:5432/db"  # pylint: disable=no-member
 
     DB_POOL_MIN_SIZE: int = 1
     DB_POOL_MAX_SIZE: int = 5
