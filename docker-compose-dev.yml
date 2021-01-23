@@ -1,0 +1,23 @@
+version: "3"
+services:
+
+  db:
+    image: postgres:13
+    restart: always
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_PASSWORD: cloudbalance
+    ports:
+      - "5432:5432"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    command: ["run_bot"]

@@ -1,0 +1,10 @@
+[flake8]
+min_python_version = 3.7.6
+ignore = E126,E127,E731,W605,W503,E501,E203,E231,F541
+per-file-ignores =
+    */__init__.py: F401
+max-line-length = 115
+exclude =
+    venv,
+    tmp,
+    migrations/versions,
