@@ -24,6 +24,17 @@ services:
       - REDIS_REPLICATION_MODE=master
     command: redis-server
 
+  app:
+    restart: always
+    build:
+      context: .
+    links:
+      - db
+      - redis
+    environment:
+      - TELEGRAM_TOKEN
+    command: ["run_bot"]
+
 volumes:
   pgstore:
   redisdata:

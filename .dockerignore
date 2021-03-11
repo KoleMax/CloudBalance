@@ -1,0 +1,7 @@
+etc
+devops
+Jenkinsfile*
+.git*
+.cache/
+.swp
+./venv

@@ -17,7 +17,6 @@ convertdate==2.3.1
 cycler==0.10.0
 Cython==0.29.22
 ephem==3.7.7.1
-fbprophet==0.7.1
 flake8==3.8.4
 gino==1.0.1
 gino-starlette==0.1.1
@@ -66,3 +65,5 @@ uvloop==0.14.0
 wrapt==1.12.1
 yarl==1.6.3
 zipp==3.4.0
+
+fbprophet==0.7.1

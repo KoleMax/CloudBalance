@@ -25,7 +25,7 @@ class App:
     def __init__(self):
         uvloop.install()
         self.db = db
-        self.sync_r = redis.Redis(host='localhost', port=6379, db=0)
+        self.sync_r = redis.Redis(host='redis', port=6379, db=0)
         if environment.settings.TELEGRAM_TOKEN:
             self.bot: Bot = Bot(token=environment.settings.TELEGRAM_TOKEN)
             self.dispatcher: Dispatcher = Dispatcher(self.bot)
@@ -41,7 +41,7 @@ class App:
     async def _redis_connect(self):
         # TODO: redis config
         self.r = await aioredis.create_redis_pool(
-            "redis://localhost", minsize=5, maxsize=10, loop=asyncio.get_event_loop()
+            "redis://redis", minsize=5, maxsize=10, loop=asyncio.get_event_loop()
         )
 
     def run(self):
