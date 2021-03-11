@@ -3,8 +3,6 @@ import logging
 from dataclasses import asdict, dataclass
 from typing import Optional
 
-from application.config.environment import Settings
-
 from gino.ext.starlette import Gino
 
 logger = logging.getLogger(__name__)
@@ -73,7 +71,7 @@ class Database(Gino):
         return res == 1
 
 
-def database_config_from_app_config(settings: Settings) -> DatabaseConfig:
+def database_config_from_app_config(settings) -> DatabaseConfig:
     return DatabaseConfig(
         dsn=settings.DB_URL,
         pool_min_size=settings.DB_POOL_MIN_SIZE,

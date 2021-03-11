@@ -8,16 +8,24 @@ services:
     environment:
       POSTGRES_DB: db
       POSTGRES_PASSWORD: cloudbalance
+    volumes:
+      - pgstore:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
+  redis:
+    image: redis:6.2-rc1
+    hostname: redis
+    ports:
+      - "6379:6379"
     volumes:
-      - .:/code
-    depends_on:
-      - db
-    command: ["run_bot"]
+      - redisdata:/data
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    command: redis-server
+
+volumes:
+  pgstore:
+  redisdata:
+
+

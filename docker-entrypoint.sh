@@ -5,6 +5,6 @@ case "$1" in
     alembic upgrade head
   ;;
   run_bot)
-    python main.py
+    alembic upgrade head && python main.py
   ;;
 esac

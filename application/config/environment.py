@@ -17,7 +17,7 @@ class Settings(pydantic.BaseSettings):
     SYSLOG_PORT: int = 514
 
     # Database config
-    DB_URL: pydantic.PostgresDsn = "postgres://postgres:cloudbalance@db:5432/db"  # pylint: disable=no-member
+    DB_URL: pydantic.PostgresDsn = "postgres://postgres:cloudbalance@localhost:5432/db"  # pylint: disable=no-member
 
     DB_POOL_MIN_SIZE: int = 1
     DB_POOL_MAX_SIZE: int = 5
@@ -28,6 +28,8 @@ class Settings(pydantic.BaseSettings):
     DB_RETRY_INTERVAL: int = 1
 
     DB_CONNECTION_PER_REQUEST: bool = True
+
+    # TODO: redis config
 
     class Config:
         env_file = ".env"
