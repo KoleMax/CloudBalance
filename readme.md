@@ -1,2 +1,2 @@
 # CloudBalance
-Telegram bot - @cloudbalance_bot
+Telegram bot - t.me/cloudbalance_bot
