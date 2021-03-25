@@ -1,15 +1,16 @@
 import json
+from typing import Callable, Coroutine
 
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, Message
 from aioredis import Redis
 
 from application.models import User
-from application.telegram.menu.main_settings.fsm import ChangeNicknameData, make_redis_change_nickname_key
+from application.telegram.fsm import ChangeNicknameData, make_redis_change_nickname_key
 from application.telegram.menu.main_settings.renderers import return_button
 
 
-def make_change_nickname_handler(redis: Redis):
-    async def set_join_to_project_state(query: CallbackQuery):
+def make_change_nickname_handler(redis: Redis) -> Callable[[CallbackQuery], Coroutine[None, None, None]]:
+    async def set_join_to_project_state(query: CallbackQuery) -> None:
         parsed_query_data = query.data.split(":")
         user_id = int(parsed_query_data[1])
 
@@ -25,8 +26,8 @@ def make_change_nickname_handler(redis: Redis):
     return set_join_to_project_state
 
 
-def make_change_nickname_callback(redis: Redis):
-    async def change_nickname(message: Message):
+def make_change_nickname_callback(redis: Redis) -> Callable[[Message], Coroutine[None, None, None]]:
+    async def change_nickname(message: Message) -> None:
         nickname = message.text
         chat_id = message.chat.id
 
@@ -43,4 +44,3 @@ def make_change_nickname_callback(redis: Redis):
         await message.answer(f"You successfully changed your nickname to {nickname}!", reply_markup=return_markup)
 
     return change_nickname
-

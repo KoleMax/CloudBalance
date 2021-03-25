@@ -6,8 +6,9 @@ services:
     restart: always
     command: ["postgres", "-c", "log_statement=all"]
     environment:
-      POSTGRES_DB: db
+      POSTGRES_USER: cloudbalance
       POSTGRES_PASSWORD: cloudbalance
+      POSTGRES_DB: cloudbalance
     volumes:
       - pgstore:/var/lib/postgresql/data
     ports:
@@ -24,16 +25,6 @@ services:
       - REDIS_REPLICATION_MODE=master
     command: redis-server
 
-  app:
-    restart: always
-    build:
-      context: .
-    links:
-      - db
-      - redis
-    environment:
-      - TELEGRAM_TOKEN
-    command: ["run_bot"]
 
 volumes:
   pgstore:

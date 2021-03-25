@@ -1,6 +1,6 @@
 from enum import Enum
 from functools import wraps
-from typing import Callable, Dict
+from typing import Callable, Dict, Type
 
 from aiogram import types
 from aiogram.utils.callback_data import CallbackData
@@ -15,13 +15,13 @@ class MainMenuCommands(Enum):
     SETTINGS = 4
 
 
-CALLBACK_DATA = CallbackData('main_menu', 'user_id', 'command')
+CALLBACK_DATA = CallbackData("main_menu", "user_id", "command")
 
 
 class MainMenuRenderer(MenuRenderer):
 
-    commands: Enum = MainMenuCommands
-    commands_to_text: Dict[commands, str] = {
+    commands: Type[MainMenuCommands] = MainMenuCommands
+    commands_to_text: Dict[Type[MainMenuCommands], str] = {
         MainMenuCommands.NEW: "Create project",
         MainMenuCommands.PROJECTS: "My projects",
         MainMenuCommands.JOIN: "Join",
@@ -38,7 +38,7 @@ class ReturnToMainMenuCommand(Enum):
     RETURN = 1
 
 
-RETURN_CALLBACK_DATA = CallbackData('back_to_main_menu', 'user_id', 'command')
+RETURN_CALLBACK_DATA = CallbackData("back_to_main_menu", "user_id", "command")
 
 
 def return_button(markup: types.InlineKeyboardMarkup, user_id: int) -> types.InlineKeyboardMarkup:
@@ -52,5 +52,5 @@ def return_decorator(func: Callable) -> Callable:
     def wrapper(instance: MenuRenderer, *args, **kwargs) -> types.InlineKeyboardMarkup:
         markup = func(instance, *args, **kwargs)
         return return_button(markup, instance.user_id)
-    return wrapper
 
+    return wrapper

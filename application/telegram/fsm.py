@@ -86,6 +86,42 @@ def make_redis_delete_transaction_key(chat_id: int) -> str:
     return f"{chat_id}_delete_transaction"
 
 
+class RenameTagData(BaseModel):
+    user_id: int
+    project_id: int
+    project_name: str
+    tag_id: int
+    tag_name: str
+
+
+def make_redis_rename_tag_key(chat_id: int) -> str:
+    return f"{chat_id}_rename_tag"
+
+
+class ChangeRoleData(BaseModel):
+    user_id: int
+    user_name: str
+    project_id: int
+    project_name: str
+
+
+class KickData(BaseModel):
+    user_id: int
+    user_role_id: int
+    project_id: int
+    project_name: str
+    target_user_id: int
+    target_user_name: str
+
+
+def make_redis_change_role_key(chat_id: int) -> str:
+    return f"{chat_id}_change_role"
+
+
+def make_redis_kick_key(chat_id: int) -> str:
+    return f"{chat_id}_kick"
+
+
 CREATE_KEY_FUNCS = [
     make_redis_creating_key,
     make_redis_create_tag_key,
@@ -96,4 +132,7 @@ CREATE_KEY_FUNCS = [
     make_redis_choosing_tag_key,
     make_redis_joining_key,
     make_redis_delete_transaction_key,
+    make_redis_rename_tag_key,
+    make_redis_change_role_key,
+    make_redis_kick_key,
 ]

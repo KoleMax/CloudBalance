@@ -13,7 +13,7 @@ class MainSettingsMenuCommands(Enum):
     CHANGE_NICKNAME = "change_nickname"
 
 
-CALLBACK_DATA = CallbackData('main_menu_settings', 'user_id', 'command')
+CALLBACK_DATA = CallbackData("main_menu_settings", "user_id", "command")
 
 
 class MainSettingsMenuRenderer(MenuRenderer):
@@ -37,7 +37,7 @@ class ReturnToMainSettingsMenuCommand(Enum):
     RETURN = 1
 
 
-RETURN_CALLBACK_DATA = CallbackData('back_to_main_menu_settings', 'user_id', 'command')
+RETURN_CALLBACK_DATA = CallbackData("back_to_main_menu_settings", "user_id", "command")
 
 
 def return_button(markup: types.InlineKeyboardMarkup, user_id: int) -> types.InlineKeyboardMarkup:
@@ -51,5 +51,5 @@ def return_decorator(func: Callable) -> Callable:
     def wrapper(instance: MenuRenderer, *args, **kwargs) -> types.InlineKeyboardMarkup:
         markup = func(instance, *args, **kwargs)
         return return_button(markup, instance.user_id)
-    return wrapper
 
+    return wrapper

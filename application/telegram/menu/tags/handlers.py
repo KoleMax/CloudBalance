@@ -2,26 +2,27 @@ import json
 
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, Message
 from aioredis import Redis
-
+from typing import Callable, Coroutine
 from application.models import Tag
 from application.models import UsersToProjects
 from application.telegram.menu.project.handlers import tags_handler
 from application.telegram.menu.tag.renderers import TagMenuRenderer
-from application.telegram.menu.tags.fsm import CreateTagData, make_redis_create_tag_key
+from application.telegram.fsm import CreateTagData, make_redis_create_tag_key
 from application.telegram.menu.tags.renderers import return_button
 
 
-def make_return_handler(redis: Redis):
-    async def return_handler(query: CallbackQuery):
+def make_return_handler(redis: Redis) -> Callable[[CallbackQuery], Coroutine[None, None, None]]:
+    async def return_handler(query: CallbackQuery) -> None:
         await tags_handler(query)
 
         chat_id = query.message.chat.id
         await redis.delete(make_redis_create_tag_key(chat_id))
+
     return return_handler
 
 
-def make_create_tag_handler(redis: Redis):
-    async def set_create_tag_state(query: CallbackQuery):
+def make_create_tag_handler(redis: Redis) -> Callable[[CallbackQuery], Coroutine[None, None, None]]:
+    async def set_create_tag_state(query: CallbackQuery) -> None:
         parsed_query_data = query.data.split(":")
         user_id = int(parsed_query_data[1])
         project_id = int(parsed_query_data[2])
@@ -40,8 +41,8 @@ def make_create_tag_handler(redis: Redis):
     return set_create_tag_state
 
 
-def make_create_tag_callback(redis: Redis):
-    async def create_tag(message: Message):
+def make_create_tag_callback(redis: Redis) -> Callable[[CallbackQuery], Coroutine[None, None, None]]:
+    async def create_tag(message: Message) -> None:
         tag_name = message.text
         chat_id = message.chat.id
 
@@ -64,7 +65,7 @@ def make_create_tag_callback(redis: Redis):
     return create_tag
 
 
-async def tag_menu_handler(query: CallbackQuery):
+async def tag_menu_handler(query: CallbackQuery) -> None:
     parsed_query_data = query.data.split(":")
     user_id = int(parsed_query_data[1])
     project_id = int(parsed_query_data[2])
@@ -73,8 +74,9 @@ async def tag_menu_handler(query: CallbackQuery):
     tag_name = str(parsed_query_data[5])
 
     user_role_id = await UsersToProjects.get_user_role_id_in_project(user_id, project_id)
+    if user_role_id is None:
+        return
 
     project_menu_markup = TagMenuRenderer(user_id, user_role_id, project_id, project_name, tag_id, tag_name)()
     await query.message.edit_text(f"Tag {tag_name} menu.")
     await query.message.edit_reply_markup(reply_markup=project_menu_markup)
-

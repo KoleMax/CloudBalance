@@ -8,5 +8,5 @@ class UserRoles(Enum):
 
 
 class TransactionTypes(Enum):
-    INCOME = "income"
-    EXPENSE = "expense"
+    INCOME = 1
+    EXPENSE = 2

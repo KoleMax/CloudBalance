@@ -9,7 +9,7 @@ from application.telegram.menu.base import ListRenderer
 from application.telegram.menu.main import renderers as main_renderers
 from application.telegram.menu.projects.shemas import ProjectInfo, ProjectsListRenderingInfo
 
-CALLBACK_DATA = CallbackData('projects_list', 'user_id', 'project_id', 'project_name')
+CALLBACK_DATA = CallbackData("projects_list", "user_id", "project_id", "project_name")
 
 
 class ProjectsListRenderer(ListRenderer):
@@ -21,14 +21,16 @@ class ProjectsListRenderer(ListRenderer):
         return super().__call__(list_data, *args, **kwargs)
 
     def add_callback(self, project_data: ProjectInfo) -> str:
-        return self.callback_data.new(user_id=self.user_id, project_id=project_data.id, project_name=project_data.name)
+        return self.callback_data.new(
+            user_id=self.user_id, project_id=project_data.id, project_name=project_data.name
+        )
 
 
 class ReturnToProjectsListCommand(Enum):
     RETURN = 1
 
 
-RETURN_CALLBACK_DATA = CallbackData('back_to_projects_list', 'user_id', 'command')
+RETURN_CALLBACK_DATA = CallbackData("back_to_projects_list", "user_id", "command")
 
 
 def return_button(markup: types.InlineKeyboardMarkup, user_id: int) -> types.InlineKeyboardMarkup:
@@ -42,4 +44,5 @@ def return_decorator(func: Callable) -> Callable:
     def wrapper(instance: ProjectsListRenderer, *args, **kwargs) -> types.InlineKeyboardMarkup:
         markup = func(instance, *args, **kwargs)
         return return_button(markup, instance.user_id)
+
     return wrapper

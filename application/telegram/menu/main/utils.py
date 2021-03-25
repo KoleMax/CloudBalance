@@ -1,10 +1,9 @@
 from aiogram.types import CallbackQuery
-
 from aioredis import Redis
 
+from application.telegram.fsm import CREATE_KEY_FUNCS
 from application.telegram.menu.main.renderers import MainMenuRenderer
 
-from application.telegram.menu.main.fsm import make_redis_joining_key, make_redis_creating_key
 
 # This func is needed because we don't have upper level menu and render callback handler for main menu, only command
 # respond handler. So, to return here by clicking to a button, we have to use this custom method.
@@ -22,9 +21,7 @@ def make_return_handler(redis: Redis):
         await query.message.edit_text("Cloud balance main menu.")
         await query.message.edit_reply_markup(reply_markup=main_menu_markup)
 
-        # We should turn off all bot interactive states, available in this menu level.
-        await redis.delete(
-            make_redis_joining_key(chat_id),
-            make_redis_creating_key(chat_id)
-        )
+        # We should turn off all bot interactive states.
+        await redis.delete(*[func(chat_id) for func in CREATE_KEY_FUNCS])
+
     return return_handler

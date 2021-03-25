@@ -1,25 +1,27 @@
 import json
+from typing import Coroutine, Callable, Any
 
 from aiogram.types import CallbackQuery, InlineKeyboardMarkup, Message
 from aioredis import Redis
 
 from application.models import Tag
-from application.telegram.menu.tag.fsm import RenameTagData, make_redis_rename_tag_key
+from application.telegram.fsm import RenameTagData, make_redis_rename_tag_key
 from application.telegram.menu.tag.renderers import return_button
 from application.telegram.menu.tags.handlers import tag_menu_handler
 
 
-def make_return_handler(redis: Redis):
-    async def return_handler(query: CallbackQuery):
+def make_return_handler(redis: Redis) -> Callable[[Any], Coroutine[Any, Any, None]]:
+    async def return_handler(query: CallbackQuery) -> None:
         await tag_menu_handler(query)
 
         chat_id = query.message.chat.id
         await redis.delete(make_redis_rename_tag_key(chat_id))
+
     return return_handler
 
 
-def make_rename_tag_handler(redis: Redis):
-    async def set_rename_tag_state(query: CallbackQuery):
+def make_rename_tag_handler(redis: Redis) -> Callable[[Any], Coroutine[Any, Any, None]]:
+    async def set_rename_tag_state(query: CallbackQuery) -> None:
         parsed_query_data = query.data.split(":")
         user_id = int(parsed_query_data[1])
         project_id = int(parsed_query_data[2])
@@ -29,20 +31,22 @@ def make_rename_tag_handler(redis: Redis):
 
         chat_id = int(query.message.chat.id)
 
-        return_markup = return_button(InlineKeyboardMarkup(row_width=3), user_id, project_id, project_name,
-                                      tag_id, tag_name)
+        return_markup = return_button(
+            InlineKeyboardMarkup(row_width=3), user_id, project_id, project_name, tag_id, tag_name
+        )
         await query.message.edit_text(f"Please, enter new name of a tag {tag_name}:")
         await query.message.edit_reply_markup(reply_markup=return_markup)
 
-        redis_data = RenameTagData(user_id=user_id, project_id=project_id, project_name=project_name,
-                                   tag_id=tag_id, tag_name=tag_name)
+        redis_data = RenameTagData(
+            user_id=user_id, project_id=project_id, project_name=project_name, tag_id=tag_id, tag_name=tag_name
+        )
         await redis.set(make_redis_rename_tag_key(chat_id), redis_data.json())
 
     return set_rename_tag_state
 
 
-def make_rename_tag_callback(redis: Redis):
-    async def rename_tag(message: Message):
+def make_rename_tag_callback(redis: Redis) -> Callable[[Any], Coroutine[Any, Any, None]]:
+    async def rename_tag(message: Message) -> None:
         new_tag_name = message.text
         chat_id = message.chat.id
 
@@ -60,8 +64,11 @@ def make_rename_tag_callback(redis: Redis):
 
         await redis.delete(redis_key)
 
-        return_markup = return_button(InlineKeyboardMarkup(row_width=3), user_id, project_id, project_name,
-                                      tag_id, new_tag_name)
-        await message.answer(f"Tag {tag_name} was successfully renamed to {new_tag_name}!", reply_markup=return_markup)
+        return_markup = return_button(
+            InlineKeyboardMarkup(row_width=3), user_id, project_id, project_name, tag_id, new_tag_name
+        )
+        await message.answer(
+            f"Tag {tag_name} was successfully renamed to {new_tag_name}!", reply_markup=return_markup
+        )
 
     return rename_tag

@@ -1,3 +1,12 @@
+setup-dev-env:
+	python -m gino.ext stub
+
+migration:
+	alembic revision --autogenerate -m $(name)
+
+migrate:
+	alembic upgrade head
+
 lint:
 	flake8 .
 	black .
