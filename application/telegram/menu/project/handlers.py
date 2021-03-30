@@ -180,9 +180,9 @@ def make_quick_report_handler(db: Database) -> Callable[[CallbackQuery], Corouti
 
         await query.message.edit_text(
             f"Quick report.\n\n"
-            f"Total:\n\tIncomes - {total_income}\n\tExpenses - {total_expense}\n\tEarning - {total_income - total_expense}\n\n"
-            f"Last 7 days:\n\tIncomes - {week_income}\n\tExpenses - {week_expense}\n\tEarning - {week_income - week_expense}\n\n"
-            f"Last 30 days:\n\tIncomes - {month_income}\n\tExpenses - {month_expense}\n\tEarning - {month_income - month_expense}\n\n"
+            f"Total:\n\tIncomes - {total_income:.2f}\n\tExpenses - {total_expense:.2f}\n\tEarning - {(total_income - total_expense):.2f}\n\n"
+            f"Last 7 days:\n\tIncomes - {week_income:.2f}\n\tExpenses - {week_expense:.2f}\n\tEarning - {(week_income - week_expense):.2f}\n\n"
+            f"Last 30 days:\n\tIncomes - {month_income:.2f}\n\tExpenses - {month_expense:.2f}\n\tEarning - {(month_income - month_expense):.2f}\n\n"
         )
         await query.message.edit_reply_markup(reply_markup=back_to_project_menu_markup)
 
@@ -307,32 +307,32 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
             spamwriter.writerow(
                 [
                     "Последние 7 дней",
-                    week_income,
-                    week_expense,
-                    week_income - week_expense,
+                    f"{week_income:.2f}",
+                    f"{week_expense:.2f}",
+                    f"{(week_income - week_expense):.2f}",
                     "",
                     "",
                     "Следующие 7 дней",
-                    weekly_income_forecast,
-                    weekly_expense_forecast,
-                    weekly_income_forecast - weekly_expense_forecast,
+                    f"{weekly_income_forecast:.2f}",
+                    f"{weekly_expense_forecast:.2f}",
+                    f"{(weekly_income_forecast - weekly_expense_forecast):.2f}",
                 ]
             )
             spamwriter.writerow(
                 [
                     "Последние 30 дней",
-                    month_income,
-                    month_expense,
-                    month_income - month_expense,
+                    f"{month_income:.2f}",
+                    f"{month_expense:.2f}",
+                    f"{(month_income - month_expense):.2f}",
                     "",
                     "",
                     "Следующие 30 дней",
-                    monthly_income_forecast,
-                    monthly_expense_forecast,
-                    monthly_income_forecast - monthly_expense_forecast,
+                    f"{monthly_income_forecast:.2f}",
+                    f"{monthly_expense_forecast:.2f}",
+                    f"{(monthly_income_forecast - monthly_expense_forecast):.2f}",
                 ]
             )
-            spamwriter.writerow(["За все время", total_income, total_expense, total_income - total_expense])
+            spamwriter.writerow(["За все время", f"{total_income:.2f}", f"{total_expense:.2f}", f"{(total_income - total_expense):.2f}"])
             spamwriter.writerow([])
 
             spamwriter.writerow(["Income", "", "", "", "", "", "Expense"])
@@ -350,7 +350,7 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
                     )
                     row.append(income[3])
                     row.append(income[2])
-                    row.append(income[1])
+                    row.append(f"{income[1]:.2f}")
                 else:
                     for _ in range(4):
                         row.append("")
@@ -363,7 +363,7 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
                     )
                     row.append(expense[3])
                     row.append(expense[2])
-                    row.append(expense[1])
+                    row.append(f"{expense[1]:.2f}")
                 spamwriter.writerow(row)
         await query.message.answer_document(FileIO("details.csv", mode="r"))
         await query.message.answer("Detailed report", reply_markup=back_to_project_menu_markup)

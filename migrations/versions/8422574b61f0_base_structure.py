@@ -1,6 +1,6 @@
 """base_structure
 
-Revision ID: ebc68db025b5
+Revision ID: 8422574b61f0
 Revises: 
 Create Date: 2021-03-25 17:35:10.072161
 
@@ -23,7 +23,7 @@ Session = sessionmaker()
 
 
 # revision identifiers, used by Alembic.
-revision = 'ebc68db025b5'
+revision = '8422574b61f0'
 down_revision = None
 branch_labels = None
 depends_on = None
