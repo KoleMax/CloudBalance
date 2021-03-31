@@ -69,4 +69,4 @@ zipp==3.4.0
 fbprophet==0.7.1
 
 python-json-logger==2.0.1
-rfc5424-logging-handler==0.2.0
+rfc5424-logging-handler==1.4.3
