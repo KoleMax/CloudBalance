@@ -67,3 +67,5 @@ yarl==1.6.3
 zipp==3.4.0
 
 fbprophet==0.7.1
+
+pythonjsonlogger==2.0.1
