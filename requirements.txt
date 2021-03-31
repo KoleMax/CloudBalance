@@ -68,4 +68,4 @@ zipp==3.4.0
 
 fbprophet==0.7.1
 
-pythonjsonlogger==2.0.1
+python-json-logger==2.0.1
