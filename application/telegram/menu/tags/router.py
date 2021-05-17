@@ -20,5 +20,5 @@ def configure_dispatcher(dispatcher: Dispatcher, redis: Redis, sync_redis: SyncR
 
     # tag menu - check permission in router
     dispatcher.callback_query_handler(
-        CALLBACK_DATA.filter(user_role_id=(enums.UserRoles.CREATOR.value, enums.UserRoles.ADMIN.value))
+        CALLBACK_DATA.filter(user_role_id=(str(enums.UserRoles.CREATOR.value), str(enums.UserRoles.ADMIN.value)))
     )(tag_menu_handler)

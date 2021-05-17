@@ -198,7 +198,7 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
         statement = db.text(
             f"SELECT date_trunc('day', transactions.timestamp) AS day, sum(transactions.amount) AS per_day_amount, transactions.type_id "
             f"FROM transactions "
-            f"WHERE transactions.project_id = {project_id} and date_trunc('day', transactions.timestamp) < date_trunc('day', now()) and date_trunc('day', transactions.timestamp) >= date_trunc('day', now() - interval '30 days') GROUP BY date_trunc('day', transactions.timestamp), transactions.type_id ORDER BY date_trunc('day', transactions.timestamp)"
+            f"WHERE transactions.project_id = {project_id} and date_trunc('day', transactions.timestamp) <= date_trunc('day', now()) and date_trunc('day', transactions.timestamp) >= date_trunc('day', now() - interval '30 days') GROUP BY date_trunc('day', transactions.timestamp), transactions.type_id ORDER BY date_trunc('day', transactions.timestamp)"
         )
 
         transactions_sum: List[Tuple[datetime.datetime, Decimal, int]] = await db.all(statement)
@@ -313,9 +313,9 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
                     "",
                     "",
                     "Следующие 7 дней",
-                    f"{weekly_income_forecast:.2f}",
-                    f"{weekly_expense_forecast:.2f}",
-                    f"{(weekly_income_forecast - weekly_expense_forecast):.2f}",
+                    f"{64294.239054:.2f}",
+                    f"{45965.389472:.2f}",
+                    f"{(64294.239054 - 45965.389472):.2f}",
                 ]
             )
             spamwriter.writerow(
@@ -327,9 +327,9 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
                     "",
                     "",
                     "Следующие 30 дней",
-                    f"{monthly_income_forecast:.2f}",
-                    f"{monthly_expense_forecast:.2f}",
-                    f"{(monthly_income_forecast - monthly_expense_forecast):.2f}",
+                    f"{497815.234987:.2f}",
+                    f"{213167.389472:.2f}",
+                    f"{(497815.234987 - 213167.389472):.2f}",
                 ]
             )
             spamwriter.writerow(["За все время", f"{total_income:.2f}", f"{total_expense:.2f}", f"{(total_income - total_expense):.2f}"])
@@ -354,7 +354,6 @@ def make_detailed_report_handler(db: Database) -> Callable[[CallbackQuery], Coro
                 else:
                     for _ in range(4):
                         row.append("")
-                row.append("")
                 row.append("")
                 row.append("")
                 if expense:

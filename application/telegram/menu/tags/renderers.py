@@ -11,7 +11,7 @@ from application.telegram.menu.tags.shemas import TagInfo, TagsListRenderingInfo
 # Have to pass user_role_id here because i want not to render menu on button click instead of rendering empty
 # menu if person doesn't have permissions
 CALLBACK_DATA = CallbackData(
-    "users_list", "user_id", "project_id", "project_name", "tag_id", "tag_name", "user_role_id"
+    "tags_list", "user_id", "project_id", "project_name", "tag_id", "tag_name", "user_role_id"
 )
 
 CREATE_TAG_CALLBACK_DATA = CallbackData("create_tag", "user_id", "project_id", "project_name", "command")
